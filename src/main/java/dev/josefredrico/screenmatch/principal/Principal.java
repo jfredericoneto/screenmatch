@@ -1,5 +1,7 @@
 package dev.josefredrico.screenmatch.principal;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.stream.Collectors;
 import dev.josefredrico.screenmatch.model.DadosEpisodio;
 import dev.josefredrico.screenmatch.model.DadosSerie;
 import dev.josefredrico.screenmatch.model.DadosTemporada;
+import dev.josefredrico.screenmatch.model.Episodio;
 import dev.josefredrico.screenmatch.service.ConsumoApi;
 import dev.josefredrico.screenmatch.service.ConverteDados;
 
@@ -48,5 +51,13 @@ public class Principal {
                 .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
                 .limit(5)
                 .forEach(System.out::println);
+
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(d -> new Episodio(t.numero(), d)))
+                .collect(Collectors.toList());
+
+        episodios.forEach(System.out::println);
+
     }
 }
